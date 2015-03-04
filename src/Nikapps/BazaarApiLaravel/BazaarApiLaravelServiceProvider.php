@@ -1,5 +1,6 @@
 <?php namespace Nikapps\BazaarApiLaravel;
 
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 
 class BazaarApiLaravelServiceProvider extends ServiceProvider {
@@ -19,6 +20,11 @@ class BazaarApiLaravelServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->package('nikapps/bazaar-api-laravel');
+
+        AliasLoader::getInstance()->alias(
+            'Bazaar',
+            'Nikapps\BazaarApiLaravel\BazaarApiFacade'
+        );
 	}
 
 	/**
@@ -28,7 +34,13 @@ class BazaarApiLaravelServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		//
+        $this->commands(['refresh-token']);
+        $this->registerCommands();
+
+        $this->app->bind('Bazaar', function(){
+
+            return new BazaarApi();
+        });
 	}
 
 	/**
@@ -40,5 +52,14 @@ class BazaarApiLaravelServiceProvider extends ServiceProvider {
 	{
 		return array();
 	}
+
+    public function registerCommands(){
+        $this->app['refresh-token'] = $this->app->share(function($app)
+        {
+            return new BazaarApiRefreshTokenCommand();
+        });
+
+
+    }
 
 }
