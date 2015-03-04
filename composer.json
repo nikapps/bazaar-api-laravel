@@ -1,6 +1,9 @@
 {
     "name": "nikapps/bazaar-api-laravel",
-    "description": "",
+    "description": "An API wrapper for cafebazaar based on popular Laravel Framework",
+    "keywords": ["CafeBazaar", "API", "Laravel", "Wrapper", "Cafebazaar Api", "In App Purchase", "iap"],
+    "license": "MIT",
+    "type": "project",
     "authors": [
         {
             "name": "Ali Borhani",

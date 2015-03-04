@@ -3,75 +3,96 @@
  * Configuration
  * BazaarApi by NikApps
  */
-
 return [
 
     /*
-     * Your CafeBazaar credentials.
-     */
+    |--------------------------------------------------------------------------
+    | Cafebazaar Credentials
+    |--------------------------------------------------------------------------
+    | you should set your cafebazaar credentials.
+    | @see http://pardakht.cafebazaar.ir/doc/developer-api/?l=fa
+    |
+    */
     'credentials' => [
+
         /*
          * your client id
          */
-//        'client_id'     => 'your-client-id',
-        'client_id'     => 'YO4Q1SKuk4xpDxbrOrx7pQ5TJDLQWN7VGYgayZRz',
+        'client_id'     => 'your-client-id',
 
         /*
          * your client secret
          */
-//        'client_secret' => 'your-client-secret',
-        'client_secret' => 'JKCflwc4lE0CUYGvuGZ0pxA6hzVzylWqUSAYAOz2ZvwdEszbTb3Cv2hGZS9k',
-
+        'client_secret' => 'your-client-secret',
 
         /*
-         * redirect uri (only for getting refresh token)
+         * redirect uri (only for fetching refresh token)
          */
-//        'redirect_uri' => 'your-redirect_uri',
-        'redirect_uri' => 'http://sheytanat.nikapps.com/bazaar',
-
-
+        'redirect_uri' => 'your-redirect_uri',
 
         /*
          * your refresh token
          *
          * you can get your refresh token via command:
-         *  php artisan bazaar:refresh-token --code=<code> --redirect-uri=<redirect>
+         * $ php artisan bazaar:refresh-token --code=<code>
          */
-//        'refresh_token' => 'your-refresh_token'
-        'refresh_token' => '3oFomVX56QUwNpeLhfr2pG8D3bD1jB'
+        'refresh_token' => 'your-refresh_token'
     ],
 
+
+
     /*
-     * CafeBazaar API options
-     */
+    |--------------------------------------------------------------------------
+    | Cafebazaar Api Options
+    |--------------------------------------------------------------------------
+    | you change default options of api including path, base url, etc.
+    |
+    */
     'api'         => [
+
         /*
          * cafebazaar base uri
          */
         'base_url'               => 'https://pardakht.cafebazaar.ir',
 
         /*
-         * verifying ssl certificate
+         * verifying ssl certificate by curl
          */
         'verify_ssl'             => false,
 
+        /*
+         * authorization options
+         */
         'authorization'          => [
             'path'       => '/auth/token/',
             'grant_type' => 'authorization_code',
         ],
+
+        /*
+         * refresh token options
+         */
         'refresh_token'          => [
             'path'       => '/auth/token/',
             'grant_type' => 'refresh_token',
         ],
 
+        /*
+         * purchase status options
+         */
         'in_app_purchase_status' => [
             'path' => '/api/validate/',
         ],
 
+        /*
+         * subscription status options
+         */
         'subscription_status'    => [
             'path' => '/api/applications/',
         ],
 
+        /*
+         * cancel subscription options
+         */
         'cancel_subscription'    => [
             'path' => '/api/applications/',
         ],
@@ -79,7 +100,10 @@ return [
     ],
 
     /*
-     * remove cached token after [x] minutes
+     * remove cached access_token after [x] minutes
+     *
+     * It should be value of 'expires_in'
+     * @see http://pardakht.cafebazaar.ir/doc/developer-api/?l=fa
      */
-    'cache_ttl' => 60
+    'cache_ttl' => 60 //in minutes
 ];
