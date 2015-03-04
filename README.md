@@ -1,4 +1,4 @@
-# Bazaar-Api-Laravel (BazaarApi for Laravel 4)
+# Bazaar-Api-Laravel (BazaarApi for Laravel)
 An API wrapper for CafeBazaar based on popular Laravel PHP Framework (Laravel 4.x)
 
 
