@@ -1,8 +1,6 @@
-<?php namespace Nikapps\BazaarApiLaravel;
+<?php namespace Nikapps\BazaarApiLaravel\Commands;
 
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Message\FutureResponse;
-use Nikapps\BazaarApiLaravel\Models\Requests\Authorization;
+use Illuminate\Support\Facades\Config;
 use Symfony\Component\Console\Input\InputOption;
 use Illuminate\Console\Command;
 
@@ -24,10 +22,11 @@ class BazaarApiRefreshTokenCommand extends Command {
 
 
     private $generateCodeUri = 'https://pardakht.cafebazaar.ir/auth/authorize/?response_type=code&access_type=offline&redirect_uri=%s&client_id=%s';
+
     /**
      * Create a new command instance.
      *
-     * @return \Nikapps\BazaarApiLaravel\BazaarApiRefreshTokenCommand
+     * @return \Nikapps\BazaarApiLaravel\Commands\BazaarApiRefreshTokenCommand
      */
     public function __construct() {
         parent::__construct();
@@ -41,48 +40,44 @@ class BazaarApiRefreshTokenCommand extends Command {
      * @return mixed
      */
     public function fire() {
-        $code = $this->option('code');
-        $redirectUri = $this->option('redirect-uri');
-
-        $authorizationRequest = new Authorization($redirectUri, $code);
-
-        $client = new \GuzzleHttp\Client([
-            'base_url' => \Config::get('bazaar-api-laravel::api.base_url')
-        ]);
-
-
-        try {
-            /** @var FutureResponse $response */
-            $response = $client->post($authorizationRequest->getUri(), [
-                'body'   => $authorizationRequest->getPostData(),
-                'verify' => \Config::get('bazaar-api-laravel::api.verify_ssl')
-            ]);
-
-            $result = $response->json();
-
-            $this->info("Refresh Token: " . $result['refresh_token']);
-            $this->comment('Save refresh token in your config file');
-
-            //rendering result as a table
-            $rows = [$result];
-            $headers = array_keys($result);
-
-            $this->table($headers, $rows);
-
-
-        } catch (ClientException $e) {
-            $this->error("Error: " . $e->getMessage());
-            $this->info("Request Url: " . $e->getRequest()->getUrl());
-
-            if ($e->getResponse()->getStatusCode() == 401) {
-                $this->comment('You should generate new code from this url: ');
-
-                $this->line(sprintf($this->generateCodeUri,
-                    $authorizationRequest->getRedirectUri(),
-                    $authorizationRequest->getClientId()
-                ));
-            }
-        }
+//        $code = $this->option('code');
+//        $redirectUri = $this->option('redirect-uri');
+//
+//            'base_url' => Config::get('bazaar-api-laravel::api.base_url')
+//
+//
+//        try {
+//            /** @var FutureResponse $response */
+//            $response = $client->post($authorizationRequest->getUri(), [
+//                'body'   => $authorizationRequest->getPostData(),
+//                'verify' => Config::get('bazaar-api-laravel::api.verify_ssl')
+//            ]);
+//
+//            $result = $response->json();
+//
+//            $this->info("Refresh Token: " . $result['refresh_token']);
+//            $this->comment('Save refresh token in your config file');
+//
+//            //rendering result as a table
+//            $rows = [$result];
+//            $headers = array_keys($result);
+//
+//            $this->table($headers, $rows);
+//
+//
+//        } catch (ClientException $e) {
+//            $this->error("Error: " . $e->getMessage());
+//            $this->info("Request Url: " . $e->getRequest()->getUrl());
+//
+//            if ($e->getResponse()->getStatusCode() == 401) {
+//                $this->comment('You should generate new code from this url: ');
+//
+//                $this->line(sprintf($this->generateCodeUri,
+//                    $authorizationRequest->getRedirectUri(),
+//                    $authorizationRequest->getClientId()
+//                ));
+//            }
+//        }
 
     }
 
@@ -99,7 +94,7 @@ class BazaarApiRefreshTokenCommand extends Command {
                 "r",
                 InputOption::VALUE_OPTIONAL,
                 "redirect-uri is defined in cafebazaar panel ",
-                \Config::get('bazaar-api-laravel::credentials.redirect_uri')
+                Config::get('bazaar-api-laravel::credentials.redirect_uri')
             ]
 
         ];

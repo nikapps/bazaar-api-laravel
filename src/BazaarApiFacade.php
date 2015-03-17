@@ -11,6 +11,6 @@ class BazaarApiFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'Bazaar';
+        return 'BazaarApi';
     }
 }

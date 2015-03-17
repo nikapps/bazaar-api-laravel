@@ -20,16 +20,10 @@
         "nikapps/bazaar-api-php": "~1.0"
     },
     "autoload": {
-        "classmap": [
-            "src/models",
-            "src/models/requests",
-            "src/models/responses",
-            "src/commands",
-            "src/exceptions"
-        ],
         "psr-4": {
             "Nikapps\\BazaarApiLaravel\\": "src/"
         }
+
     },
     "minimum-stability": "stable"
 }

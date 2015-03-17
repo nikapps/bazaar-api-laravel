@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
+use Nikapps\BazaarApiLaravel\Commands\BazaarApiRefreshTokenCommand;
 
 class BazaarApiLaravelServiceProvider extends ServiceProvider {
 
@@ -22,7 +23,7 @@ class BazaarApiLaravelServiceProvider extends ServiceProvider {
 		$this->package('nikapps/bazaar-api-laravel');
 
         AliasLoader::getInstance()->alias(
-            'Bazaar',
+            'BazaarApi',
             'Nikapps\BazaarApiLaravel\BazaarApiFacade'
         );
 	}
