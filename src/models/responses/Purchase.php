@@ -5,6 +5,20 @@ use Carbon\Carbon;
 class Purchase implements BazaarApiResponse {
 
     /**
+     * purchase status flags
+     */
+    const PURCHASE_STATUS_PURCHASED = 0;
+    const PURCHASE_STATUS_CANCELLED = 1;
+    const PURCHASE_STATUS_REFUNDED = 2;
+
+    /**
+     * consumption status flags
+     */
+    const CONSUMPTION_STATUS_NOT_CONSUMED = 0;
+    const CONSUMPTION_STATUS_CONSUMED = 1; //bazaar return empty response for consumed products
+
+
+    /**
      * @var bool
      */
     private $ok = false;
