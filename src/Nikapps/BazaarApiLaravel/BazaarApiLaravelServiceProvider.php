@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
+use Nikapps\BazaarApiLaravel\Console\BazaarApiClearCacheCommand;
 use Nikapps\BazaarApiLaravel\Console\BazaarApiRefreshTokenCommand;
 
 class BazaarApiLaravelServiceProvider extends ServiceProvider {
@@ -36,11 +37,12 @@ class BazaarApiLaravelServiceProvider extends ServiceProvider {
 	public function register()
 	{
         $this->commands(['refresh-token']);
+        $this->commands(['clear-cache']);
         $this->registerCommands();
 
-        $this->app->bind('Bazaar', function($app){
+        $this->app->bind('BazaarApi', function($app){
             $config = $app['config'];
-            return new BazaarApi($config);
+            return new BazaarApiFactory($config);
         });
 	}
 
@@ -55,10 +57,17 @@ class BazaarApiLaravelServiceProvider extends ServiceProvider {
 	}
 
     public function registerCommands(){
+
         $this->app['refresh-token'] = $this->app->share(function($app)
         {
             $config = $app['config'];
             return new BazaarApiRefreshTokenCommand($config);
+        });
+
+        $this->app['clear-cache'] = $this->app->share(function($app)
+        {
+            $config = $app['config'];
+            return new BazaarApiClearCacheCommand($config);
         });
 
     }

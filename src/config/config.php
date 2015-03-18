@@ -28,7 +28,7 @@ return [
         /*
          * redirect uri (only for fetching refresh token)
          */
-        'redirect_uri' => 'your-redirect_uri',
+        'redirect_uri'  => 'your-redirect_uri',
 
         /*
          * your refresh token
@@ -38,7 +38,6 @@ return [
          */
         'refresh_token' => 'your-refresh_token'
     ],
-
 
 
     /*
@@ -59,6 +58,11 @@ return [
          * verifying ssl certificate by curl
          */
         'verify_ssl'             => false,
+
+        /*
+         * refresh access token when access token is expired
+         */
+        'auto_refresh_token' => true,
 
         /*
          * authorization options
@@ -99,11 +103,16 @@ return [
 
     ],
 
-    /*
-     * remove cached access_token after [x] minutes
-     *
-     * It should be value of 'expires_in'
-     * @see http://pardakht.cafebazaar.ir/doc/developer-api/?l=fa
-     */
-    'cache_ttl' => 60 //in minutes
+    'cache'       => [
+        /*
+         * cache driver
+         */
+        'cache_driver' => null, //null for default driver
+
+        /*
+         * cache name
+         */
+        'cache_name'   => 'bazaar-api-laravel::access_token'
+    ]
+
 ];

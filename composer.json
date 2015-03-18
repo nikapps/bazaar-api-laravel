@@ -22,7 +22,8 @@
     "autoload": {
 
         "classmap": [
-            "src/Console"
+            "src/Console",
+            "src/TokenManager"
         ],
 
         "psr-0": {
