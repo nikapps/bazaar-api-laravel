@@ -18,6 +18,7 @@ Or you can add this [package](https://packagist.org/packages/nikapps/bazaar-api-
     "require": {
         "nikapps/bazaar-api-laravel": "2.*"
     }
+    
 }
 ~~~
 
@@ -97,10 +98,18 @@ If you want to get a purchase information:
 ~~~php
 $purchase = BazaarApi::purchase('com.package.name', 'product_id', 'purchase_token');
 
+//or you can pass an array
+$purchase = BazaarApi::purchase([
+	'package' => 'com.package.name',
+	'product_id' => 'product_id',
+	'purchase_token' => 'purchase_token'
+]);
+
 echo "Developer Payload: " . $purchase->getDeveloperPayload();
 echo "PurchaseTime: " . $purchase->getPurchaseTime(); //instance of Carbon
 echo "Consumption State: " . $purchase->getConsumptionState();
 echo "Purchase State: " . $purchase->getPurchaseState();
+echo "Kind: " . $purchase->getKind();
 ~~~
 
 #### Subscription
@@ -108,6 +117,13 @@ If you want to get a subscription information:
 
 ~~~php
 $subscription = BazaarApi::subscription('com.package.name', 'subscription_id', 'purchase_token');
+
+//or you can pass an array
+$subscription = BazaarApi::subscription([
+    'package' => 'com.package.name',
+    'subscription_id' => 'subscription_id',
+    'purchase_token' => 'purchase_token'
+]);
 
 echo "Initiation Time: " . $subscription->getInitiationTime(); // instance of Carbon
 echo "Expiration Time: " . $subscription->getExpirationTime(); // instance of Carbon
@@ -119,36 +135,74 @@ echo "Kind: " . $subscription->getKind();
 If you want to cancel a subscription:
 
 ~~~php
-$bazaarApi = new BazaarApi();
+$cancelSubscription = BazaarApi::cancelSubscription('com.package.name', 'subscription_id', 'purchase_token');
 
-//creating cancel subscription request
-$cancelSubscriptionRequest = new CancelSubscriptionRequest();
-$cancelSubscriptionRequest->setPackage('com.package.name');
-$cancelSubscriptionRequest->setSubscriptionId('subscription_id');
-$cancelSubscriptionRequest->setPurchaseToken('123456789123456789');
+//or you can pass an array
+$cancelSubscription = BazaarApi::cancelSubscription([
+    'package' => 'com.package.name',
+    'subscription_id' => 'subscription_id',
+    'purchase_token' => 'purchase_token'
+]);
 
-//send request to cafebazaar and cancel a subscription
-$cancelSubscription = $bazaarApi->cancelSubscription($cancelSubscriptionRequest);
-
-//if response is valid and we cancelled the subscription
-if ($cancelSubscription->isOk()) {
-    echo "The subscription is cancelled!";
-} else {
-    echo 'Failed!';
-}
+echo "Cancel Subscription: " . $cancelSubscription->isCancelled(); // bool
 ~~~
 
+#### Refresh Token (Manually)
+By default, this package refresh access token if token is expired.
+If you want to refresh access token manually:
+
+~~~php
+$token = BazaarApi::refreshToken();
+
+echo 'Access Token: ' . $token->getAccessToken();
+echo 'Scope: ' . $token->getScope();
+echo 'Expire In: ' . $token->getExpireIn();
+echo 'Token Type: ' . $token->getTokenType();
+~~~
+
+#### Clear Cache
+This package store token in cache. If you want to clear your cache, run this command:
+
+```
+php artisan bazaar:clear-cache
+```
+
+## Exceptions
+* **BazaarApiException**
+
+*Parent of other exceptions.*
+
+* **ExpiredAccessTokenException**
+
+*When token is expired (only when auto-refresh-token is disabled in config file)*
+
+* **InvalidJsonException**
+
+*When response has invalid json structure*
+
+* **InvalidPackageNameException**
+
+*When package name is invalid*
+
+* **InvalidTokenException**
+
+*When access token is invalid*
+
+* **NetworkErrorException**
+
+*Guzzle ClientExcpetion*
+
+you can get guzzle exception by `$e->getClientException()`
+
+
+* **NotFoundException**
+
+*When purchase or subscrption is not found*
 
 ## Dependencies
 
 * [GuzzleHttp 5.2.x](https://packagist.org/packages/guzzlehttp/guzzle)
-
-
-
-## Todo
-* Custom cache driver
-* Improve errors and exceptions
-* Create standalone php library
+* [Bazaar-Api-PHP 1.x](https://packagist.org/packages/nikapps/bazaar-api-php)
 
 
 ## Contribute
