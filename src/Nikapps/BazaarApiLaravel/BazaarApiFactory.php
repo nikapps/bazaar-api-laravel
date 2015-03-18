@@ -158,7 +158,7 @@ class BazaarApiFactory {
      * @param CancelSubscriptionRequest|array|string $packageNameOrRequestOrArray
      * @param string|null $subscriptionId
      * @param string|null $purchaseToken
-     * @return \Nikapps\BazaarApiPhp\Models\Responses\Subscription
+     * @return \Nikapps\BazaarApiPhp\Models\Responses\CancelSubscription
      * @throws ExpiredAccessTokenException
      * @throws \Nikapps\BazaarApiPhp\Exceptions\InvalidPackageNameException
      * @throws \Nikapps\BazaarApiPhp\Exceptions\InvalidTokenException

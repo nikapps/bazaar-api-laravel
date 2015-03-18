@@ -1,14 +1,22 @@
 # Bazaar-Api-Laravel (BazaarApi for Laravel)
-An API wrapper for CafeBazaar based on popular Laravel PHP Framework (Laravel 4.x)
+An API wrapper for CafeBazaar based on popular Laravel PHP Framework (Laravel 4.2.x)
 
+*Version 2.x is based on [Bazaar-Api-PHP](https://github.com/nikapps/bazaar-api-php).*
 
 ## Installation
-Using composer, add this [package](https://packagist.org/packages/nikapps/bazaar-api-laravel) dependency to your Laravel's composer.json :
+
+Simply run command:
+
+```
+composer require nikapps/bazaar-api-laravel
+```
+
+Or you can add this [package](https://packagist.org/packages/nikapps/bazaar-api-laravel) dependency to your Laravel's composer.json :
 
 ~~~json
 {
     "require": {
-        "nikapps/bazaar-api-laravel": "1.*"
+        "nikapps/bazaar-api-laravel": "2.*"
     }
 }
 ~~~
@@ -18,6 +26,8 @@ Then update composer:
 ```
 composer update
 ```
+
+-
 
 Add this package provider in your providers array `[app/config/app.php]`:
 
@@ -71,7 +81,8 @@ php artisan bazaar:refresh-token <CODE>
 ```
 *- replace `<CODE>` with the copied data.*
 
-* Copy `refresh_token` and save in your configuration file.
+* Copy `refresh_token` and save in your configuration file. 
+*(app/config/packages/nikapps/bazaar-api-laravel/config.php)*
 
 #### Done!
 
@@ -84,51 +95,24 @@ php artisan bazaar:refresh-token <CODE>
 If you want to get a purchase information:
 
 ~~~php
-$bazaarApi = new BazaarApi();
+$purchase = BazaarApi::purchase('com.package.name', 'product_id', 'purchase_token');
 
-//creating purchase request
-$purchaseStatusRequest = new PurchaseStatusRequest();
-$purchaseStatusRequest->setPackage('com.package.name');
-$purchaseStatusRequest->setProductId('product_id');
-$purchaseStatusRequest->setPurchaseToken('123456789123456789');
-
-//send request to cafebazaar and get purchase info
-$purchase = $bazaarApi->getPurchase($purchaseStatusRequest);
-
-//if response is valid and we have this purchase
-if($purchase->isOk()){
-    echo "Developer Payload: " . $purchase->getDeveloperPayload();
-    echo "PurchaseTime: " . $purchase->getPurchaseTime(); //instance of Carbon
-    echo "Consumption State: " . $purchase->getConsumptionState();
-    echo "Purchase State: " . $purchase->getPurchaseState();
-}else{
-    echo 'Failed!';
-}
+echo "Developer Payload: " . $purchase->getDeveloperPayload();
+echo "PurchaseTime: " . $purchase->getPurchaseTime(); //instance of Carbon
+echo "Consumption State: " . $purchase->getConsumptionState();
+echo "Purchase State: " . $purchase->getPurchaseState();
 ~~~
 
 #### Subscription
 If you want to get a subscription information:
 
 ~~~php
-$bazaarApi = new BazaarApi();
+$subscription = BazaarApi::subscription('com.package.name', 'subscription_id', 'purchase_token');
 
-//creating subscription request
-$subscriptionStatusRequest = new SubscriptionStatusRequest();
-$subscriptionStatusRequest->setPackage('com.package.name');
-$subscriptionStatusRequest->setSubscriptionId('subscription_id');
-$subscriptionStatusRequest->setPurchaseToken('123456789123456789');
-
-//send request to cafebazaar and get subscription info
-$subscription = $bazaarApi->getSubscription($subscriptionStatusRequest);
-
-//if response is valid and we have this subscription
-if ($subscription->isOk()) {
-    echo "Initiation Time: " . $subscription->getInitiationTime(); // instance of Carbon
-    echo "Expiration Time: " . $subscription->getExpirationTime(); // instance of Carbon
-    echo "Auto Renewing: " . $subscription->isAutoRenewing(); // boolean
-} else {
-    echo 'Failed!';
-}
+echo "Initiation Time: " . $subscription->getInitiationTime(); // instance of Carbon
+echo "Expiration Time: " . $subscription->getExpirationTime(); // instance of Carbon
+echo "Auto Renewing: " . $subscription->isAutoRenewing(); // boolean
+echo "Kind: " . $subscription->getKind();
 ~~~
 
 #### Cancel Subscription
