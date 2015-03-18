@@ -2,7 +2,7 @@
 
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
-use Nikapps\BazaarApiLaravel\Commands\BazaarApiRefreshTokenCommand;
+use Nikapps\BazaarApiLaravel\Console\BazaarApiRefreshTokenCommand;
 
 class BazaarApiLaravelServiceProvider extends ServiceProvider {
 
@@ -38,9 +38,9 @@ class BazaarApiLaravelServiceProvider extends ServiceProvider {
         $this->commands(['refresh-token']);
         $this->registerCommands();
 
-        $this->app->bind('Bazaar', function(){
-
-            return new BazaarApi();
+        $this->app->bind('Bazaar', function($app){
+            $config = $app['config'];
+            return new BazaarApi($config);
         });
 	}
 
@@ -57,9 +57,9 @@ class BazaarApiLaravelServiceProvider extends ServiceProvider {
     public function registerCommands(){
         $this->app['refresh-token'] = $this->app->share(function($app)
         {
-            return new BazaarApiRefreshTokenCommand();
+            $config = $app['config'];
+            return new BazaarApiRefreshTokenCommand($config);
         });
-
 
     }
 

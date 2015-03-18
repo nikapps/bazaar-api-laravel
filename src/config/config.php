@@ -80,21 +80,21 @@ return [
          * purchase status options
          */
         'in_app_purchase_status' => [
-            'path' => '/api/validate/',
+            'path' => '/api/validate/{package}/inapp/{product_id}/purchases/{purchase_token}/?',
         ],
 
         /*
          * subscription status options
          */
         'subscription_status'    => [
-            'path' => '/api/applications/',
+            'path' => '/api/applications/{package}/subscriptions/{subscription_id}/purchases/{purchase_token}/',
         ],
 
         /*
          * cancel subscription options
          */
         'cancel_subscription'    => [
-            'path' => '/api/applications/',
+            'path' => '/api/applications/{package}/subscriptions/{subscription_id}/purchases/{purchase_token}/cancel/',
         ],
 
     ],
