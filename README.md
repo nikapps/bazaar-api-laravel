@@ -1,5 +1,5 @@
 # Bazaar-Api-Laravel (BazaarApi for Laravel)
-An API wrapper for CafeBazaar based on popular Laravel PHP Framework (Laravel 4.2.x)
+An Easy-To-Use CafeBazaar API helper package for Laravel Framework (Laravel 4.2.x)
 
 *Version 2.x is based on [Bazaar-Api-PHP](https://github.com/nikapps/bazaar-api-php).*
 
@@ -36,7 +36,7 @@ Add this package provider in your providers array `[app/config/app.php]`:
 'Nikapps\BazaarApiLaravel\BazaarApiLaravelServiceProvider',
 ~~~
 
-Next you should publish configuration file. Run this command:
+Next you need to publish configuration file. Run this command:
 
 ```
 php artisan config:publish nikapps/bazaar-api-laravel
@@ -52,13 +52,13 @@ If you see a `bazaar:refresh-token` command, you are all set to go !
 
 ## Configuration
 
-#### Create client
+#### Create a client
 First of all, you should go to your cafebazaar panel and get `client id` and `client secret`.
 
 * Login to your panel and go to this url: *(Developer API section)*
 `http://pardakht.cafebazaar.ir/panel/developer-api/?l=fa`
 
-* Click on `new client` and enter your redirect uri (it's needed to get returned `code` and `refresh_token`)
+* Click on `new client` and enter your redirect uri (you have to set it for getting `code` and `refresh_token` from cafebazaar)
 
 * Change your configuration file and set your `client_id`, `client_secret` and `redirect_uri`.
 
@@ -70,7 +70,7 @@ https://pardakht.cafebazaar.ir/auth/authorize/?response_type=code&access_type=of
 ```
 *- don't forget to change `<REDIRECT_URI>` and `<CLIENT_ID>`.*
 
-* After clicking on accept/confirm button, you will be redirected to: `<REDIRECT_URI>?code=<CODE>`
+* After clicking on accept/confirm button, you'll go to : `<REDIRECT_URI>?code=<CODE>`
 
 *- copy  `<CODE>`*
 
@@ -93,7 +93,6 @@ php artisan bazaar:refresh-token <CODE>
 
 
 #### Purchase
-If you want to get a purchase information:
 
 ~~~php
 $purchase = BazaarApi::purchase('com.package.name', 'product_id', 'purchase_token');
@@ -113,7 +112,6 @@ echo "Kind: " . $purchase->getKind();
 ~~~
 
 #### Subscription
-If you want to get a subscription information:
 
 ~~~php
 $subscription = BazaarApi::subscription('com.package.name', 'subscription_id', 'purchase_token');
@@ -132,7 +130,6 @@ echo "Kind: " . $subscription->getKind();
 ~~~
 
 #### Cancel Subscription
-If you want to cancel a subscription:
 
 ~~~php
 $cancelSubscription = BazaarApi::cancelSubscription('com.package.name', 'subscription_id', 'purchase_token');
@@ -148,8 +145,7 @@ echo "Cancel Subscription: " . $cancelSubscription->isCancelled(); // bool
 ~~~
 
 #### Refresh Token (Manually)
-By default, this package refresh access token if token is expired.
-If you want to refresh access token manually:
+This packages refreshes token when it's necessary, but if you want you can do it manually.
 
 ~~~php
 $token = BazaarApi::refreshToken();
@@ -161,43 +157,11 @@ echo 'Token Type: ' . $token->getTokenType();
 ~~~
 
 #### Clear Cache
-This package store token in cache. If you want to clear your cache, run this command:
+Run this command to clean your cache, this command also invalidates your token.
 
 ```
 php artisan bazaar:clear-cache
 ```
-
-## Exceptions
-* **BazaarApiException**
-
-*Parent of other exceptions.*
-
-* **ExpiredAccessTokenException**
-
-*When token is expired (only when auto-refresh-token is disabled in config file)*
-
-* **InvalidJsonException**
-
-*When response has invalid json structure*
-
-* **InvalidPackageNameException**
-
-*When package name is invalid*
-
-* **InvalidTokenException**
-
-*When access token is invalid*
-
-* **NetworkErrorException**
-
-*Guzzle ClientExcpetion*
-
-you can get guzzle exception by `$e->getClientException()`
-
-
-* **NotFoundException**
-
-*When purchase or subscrption is not found*
 
 ## Dependencies
 
