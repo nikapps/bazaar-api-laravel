@@ -54,7 +54,7 @@ class BazaarApiLaravelServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return array();
+        return [];
     }
 
     public function registerCommands()
