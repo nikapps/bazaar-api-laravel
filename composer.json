@@ -1,7 +1,15 @@
 {
     "name": "nikapps/bazaar-api-laravel",
     "description": "An API wrapper for cafebazaar based on popular Laravel Framework",
-    "keywords": ["CafeBazaar", "API", "Laravel", "Wrapper", "Cafebazaar Api", "In App Purchase", "iap"],
+    "keywords": [
+        "CafeBazaar",
+        "API",
+        "Laravel",
+        "Wrapper",
+        "Cafebazaar Api",
+        "In App Purchase",
+        "iap"
+    ],
     "license": "MIT",
     "type": "project",
     "authors": [
@@ -20,16 +28,13 @@
         "nikapps/bazaar-api-php": "1.*"
     },
     "autoload": {
-
         "classmap": [
             "src/Console",
             "src/TokenManager"
         ],
-
         "psr-0": {
             "Nikapps\\BazaarApiLaravel\\": "src/"
         }
-
     },
     "minimum-stability": "stable"
 }
