@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Cache;
 use Nikapps\BazaarApiPhp\TokenManagers\TokenManagerInterface;
 
-class CacheTokenManager implements TokenManagerInterface {
+class CacheTokenManager implements TokenManagerInterface
+{
 
     /**
      * cache driver
@@ -22,11 +23,12 @@ class CacheTokenManager implements TokenManagerInterface {
      * @param int $ttl number of seconds remaining until the token expires
      * @return mixed
      */
-    public function storeToken($accessToken, $ttl) {
+    public function storeToken($accessToken, $ttl)
+    {
 
         $ttlInMin = intval($ttl / 60);
 
-        if(\Cache::driver($this->getCacheDriver())->has($this->cacheName)){
+        if (\Cache::driver($this->getCacheDriver())->has($this->cacheName)) {
             \Cache::driver($this->getCacheDriver())->forget($this->cacheName);
         }
 
@@ -38,7 +40,8 @@ class CacheTokenManager implements TokenManagerInterface {
      *
      * @return string
      */
-    public function loadToken() {
+    public function loadToken()
+    {
 
         return \Cache::driver($this->getCacheDriver())->get($this->cacheName, '');
     }
@@ -48,7 +51,8 @@ class CacheTokenManager implements TokenManagerInterface {
      *
      * @return bool
      */
-    public function isTokenExpired() {
+    public function isTokenExpired()
+    {
 
         return !\Cache::driver($this->getCacheDriver())->has($this->cacheName);
     }
@@ -56,30 +60,32 @@ class CacheTokenManager implements TokenManagerInterface {
     /**
      * @return mixed
      */
-    public function getCacheDriver() {
+    public function getCacheDriver()
+    {
         return $this->cacheDriver;
     }
 
     /**
      * @param mixed $cacheDriver
      */
-    public function setCacheDriver($cacheDriver) {
+    public function setCacheDriver($cacheDriver)
+    {
         $this->cacheDriver = $cacheDriver;
     }
 
     /**
      * @return mixed
      */
-    public function getCacheName() {
+    public function getCacheName()
+    {
         return $this->cacheName;
     }
 
     /**
      * @param mixed $cacheName
      */
-    public function setCacheName($cacheName) {
+    public function setCacheName($cacheName)
+    {
         $this->cacheName = $cacheName;
     }
-
-
 }

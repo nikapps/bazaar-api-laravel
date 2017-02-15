@@ -4,7 +4,8 @@ use Illuminate\Config\Repository as ConfigRepository;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 
-class BazaarApiClearCacheCommand extends Command {
+class BazaarApiClearCacheCommand extends Command
+{
 
     /**
      * The console command name.
@@ -31,7 +32,8 @@ class BazaarApiClearCacheCommand extends Command {
      * @param ConfigRepository $config
      * @return \Nikapps\BazaarApiLaravel\Console\BazaarApiClearCacheCommand
      */
-    public function __construct(ConfigRepository $config) {
+    public function __construct(ConfigRepository $config)
+    {
 
         $this->config = $config;
 
@@ -44,24 +46,21 @@ class BazaarApiClearCacheCommand extends Command {
      *
      * @return mixed
      */
-    public function fire() {
+    public function fire()
+    {
         $cacheDriver = $this->option('driver');
         $cacheName = $this->option('name');
 
-        if(\Cache::driver($cacheDriver)->has($cacheName)){
-
+        if (\Cache::driver($cacheDriver)->has($cacheName)) {
             $this->comment('Value: ' . \Cache::driver($cacheDriver)->get($cacheName));
             \Cache::driver($cacheDriver)->forget($cacheName);
 
             $this->info("$cacheName has been successfully removed from cache $cacheDriver");
-
-        }else{
-
+        } else {
             $this->error("$cacheName is already cleared from cache $cacheDriver");
         }
 
         $this->info('Done!');
-
     }
 
     /**
@@ -69,7 +68,8 @@ class BazaarApiClearCacheCommand extends Command {
      *
      * @return array
      */
-    protected function getOptions() {
+    protected function getOptions()
+    {
         return [
             [
                 "driver",
@@ -89,6 +89,4 @@ class BazaarApiClearCacheCommand extends Command {
 
         ];
     }
-
-
-} 
+}
