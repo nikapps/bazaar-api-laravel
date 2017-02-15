@@ -9,8 +9,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Illuminate\Console\Command;
 use Illuminate\Config\Repository as ConfigRepository;
 
-
-class BazaarApiRefreshTokenCommand extends Command {
+class BazaarApiRefreshTokenCommand extends Command
+{
 
     /**
      * The console command name.
@@ -39,7 +39,8 @@ class BazaarApiRefreshTokenCommand extends Command {
      * @param ConfigRepository $config
      * @return \Nikapps\BazaarApiLaravel\Console\BazaarApiRefreshTokenCommand
      */
-    public function __construct(ConfigRepository $config) {
+    public function __construct(ConfigRepository $config)
+    {
 
         $this->config = $config;
 
@@ -53,7 +54,8 @@ class BazaarApiRefreshTokenCommand extends Command {
      *
      * @return mixed
      */
-    public function fire() {
+    public function fire()
+    {
 
 
         $code = $this->option('code');
@@ -66,7 +68,8 @@ class BazaarApiRefreshTokenCommand extends Command {
         $bazaarApi->setApiConfig($apiConfig);
         $bazaarApi->setAccountConfig($accountConfig);
 
-        $this->line(sprintf($this->generateCodeUri,
+        $this->line(sprintf(
+            $this->generateCodeUri,
             $accountConfig->getRedirectUri(),
             $accountConfig->getClientId()
         ));
@@ -84,26 +87,22 @@ class BazaarApiRefreshTokenCommand extends Command {
             $this->comment('Save refresh token in your config file');
 
             $this->table($headers, $rows);
-
         } catch (NetworkErrorException $e) {
-
             $this->error('Error: ' . $e->getClientException()->getRequest()->getUrl());
             $this->error('Response Status: ' . $e->getClientException()->getResponse()->getStatusCode());
 
-            if($e->getClientException()->getResponse()->getStatusCode() == 401) {
+            if ($e->getClientException()->getResponse()->getStatusCode() == 401) {
                 $this->comment('Your credentials is invalid or you should generate new code from this url: ');
 
-                $this->line(sprintf($this->generateCodeUri,
+                $this->line(sprintf(
+                    $this->generateCodeUri,
                     $accountConfig->getRedirectUri(),
                     $accountConfig->getClientId()
                 ));
             }
-
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->error("Unknown Error: " . $e->getMessage());
         }
-
-
     }
 
     /**
@@ -111,7 +110,8 @@ class BazaarApiRefreshTokenCommand extends Command {
      *
      * @return array
      */
-    protected function getOptions() {
+    protected function getOptions()
+    {
         return [
             ["code", "c", InputOption::VALUE_REQUIRED, "returned code from cafebazaar", null],
             [
@@ -130,7 +130,8 @@ class BazaarApiRefreshTokenCommand extends Command {
      *
      * @return ApiConfig
      */
-    protected function getApiConfig(){
+    protected function getApiConfig()
+    {
 
         $apiConfig = new ApiConfig();
         $apiConfig->setAuthorizationGrantType($this->config->get('bazaar-api-laravel::api.authorization.grant_type'));
@@ -148,7 +149,8 @@ class BazaarApiRefreshTokenCommand extends Command {
      * @param $redirectUrl
      * @return \Nikapps\BazaarApiPhp\Configs\AccountConfig
      */
-    protected function getAccountConfig($code, $redirectUrl){
+    protected function getAccountConfig($code, $redirectUrl)
+    {
 
         $accountConfig = new AccountConfig();
         $accountConfig->setClientId($this->config->get('bazaar-api-laravel::credentials.client_id'));
@@ -158,5 +160,4 @@ class BazaarApiRefreshTokenCommand extends Command {
 
         return $accountConfig;
     }
-
-} 
+}

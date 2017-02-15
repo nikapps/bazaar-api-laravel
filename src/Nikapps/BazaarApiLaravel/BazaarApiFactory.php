@@ -10,7 +10,8 @@ use Nikapps\BazaarApiPhp\Models\Requests\PurchaseStatusRequest;
 use Nikapps\BazaarApiPhp\Models\Requests\RefreshTokenRequest;
 use Nikapps\BazaarApiPhp\Models\Requests\SubscriptionStatusRequest;
 
-class BazaarApiFactory {
+class BazaarApiFactory
+{
 
     /**
      * @var ConfigRepository
@@ -38,7 +39,8 @@ class BazaarApiFactory {
      *
      * @param ConfigRepository $config
      */
-    public function __construct(ConfigRepository $config) {
+    public function __construct(ConfigRepository $config)
+    {
 
         $this->config = $config;
 
@@ -54,7 +56,6 @@ class BazaarApiFactory {
         $tokenManager->setCacheName($this->config->get('bazaar-api-laravel::cache.cache_name'));
 
         $this->bazaarApi->setTokenManager($tokenManager);
-
     }
 
     /**
@@ -65,17 +66,19 @@ class BazaarApiFactory {
      * @throws \Nikapps\BazaarApiPhp\Exceptions\NotFoundException
      * @throws \Nikapps\BazaarApiPhp\Exceptions\InvalidJsonException
      */
-    public function refreshToken($shouldStore = true) {
+    public function refreshToken($shouldStore = true)
+    {
         $refreshTokenRequest = new RefreshTokenRequest();
 
         $refreshToken = $this->bazaarApi->refreshToken($refreshTokenRequest);
         if ($shouldStore) {
-            $this->bazaarApi->getTokenManager()->storeToken($refreshToken->getAccessToken(),
-                $refreshToken->getExpireIn());
+            $this->bazaarApi->getTokenManager()->storeToken(
+                $refreshToken->getAccessToken(),
+                $refreshToken->getExpireIn()
+            );
         }
 
         return $refreshToken;
-
     }
 
     /**
@@ -92,15 +95,14 @@ class BazaarApiFactory {
      * @throws \Nikapps\BazaarApiPhp\Exceptions\NotFoundException
      * @throws \Nikapps\BazaarApiPhp\Exceptions\InvalidJsonException
      */
-    public function purchase($packageNameOrRequestOrArray, $productId = null, $purchaseToken = null) {
+    public function purchase($packageNameOrRequestOrArray, $productId = null, $purchaseToken = null)
+    {
 
         $purchaseRequest = $this->makePurchaseRequest($packageNameOrRequestOrArray, $productId, $purchaseToken);
 
         try {
             return $this->bazaarApi->getPurchase($purchaseRequest);
-
         } catch (ExpiredAccessTokenException $e) {
-
             if (!$this->config->get('bazaar-api-laravel::api.auto_refresh_token')) {
                 //auto refresh token is disabled
                 throw new ExpiredAccessTokenException;
@@ -112,7 +114,6 @@ class BazaarApiFactory {
                 return $this->purchase($purchaseRequest);
             }
         }
-
     }
 
     /**
@@ -129,15 +130,14 @@ class BazaarApiFactory {
      * @throws \Nikapps\BazaarApiPhp\Exceptions\NotFoundException
      * @throws \Nikapps\BazaarApiPhp\Exceptions\InvalidJsonException
      */
-    public function subscription($packageNameOrRequestOrArray, $subscriptionId = null, $purchaseToken = null) {
+    public function subscription($packageNameOrRequestOrArray, $subscriptionId = null, $purchaseToken = null)
+    {
 
         $subscriptionRequest = $this->makeSubscriptionRequest($packageNameOrRequestOrArray, $subscriptionId, $purchaseToken);
 
         try {
             return $this->bazaarApi->getSubscription($subscriptionRequest);
-
         } catch (ExpiredAccessTokenException $e) {
-
             if (!$this->config->get('bazaar-api-laravel::api.auto_refresh_token')) {
                 //auto refresh token is disabled
                 throw new ExpiredAccessTokenException;
@@ -149,7 +149,6 @@ class BazaarApiFactory {
                 return $this->subscription($subscriptionRequest);
             }
         }
-
     }
 
     /**
@@ -166,15 +165,14 @@ class BazaarApiFactory {
      * @throws \Nikapps\BazaarApiPhp\Exceptions\NotFoundException
      * @throws \Nikapps\BazaarApiPhp\Exceptions\InvalidJsonException
      */
-    public function cancelSubscription($packageNameOrRequestOrArray, $subscriptionId = null, $purchaseToken = null) {
+    public function cancelSubscription($packageNameOrRequestOrArray, $subscriptionId = null, $purchaseToken = null)
+    {
 
         $cancelSubscriptionRequest = $this->makeCancelSubscriptionRequest($packageNameOrRequestOrArray, $subscriptionId, $purchaseToken);
 
         try {
             return $this->bazaarApi->cancelSubscription($cancelSubscriptionRequest);
-
         } catch (ExpiredAccessTokenException $e) {
-
             if (!$this->config->get('bazaar-api-laravel::api.auto_refresh_token')) {
                 //auto refresh token is disabled
                 throw new ExpiredAccessTokenException;
@@ -186,7 +184,6 @@ class BazaarApiFactory {
                 return $this->cancelSubscription($cancelSubscriptionRequest);
             }
         }
-
     }
 
 
@@ -198,7 +195,8 @@ class BazaarApiFactory {
      * @param string|null $purchaseToken
      * @return PurchaseStatusRequest
      */
-    protected function makePurchaseRequest($packageNameOrRequestOrArray, $productId = null, $purchaseToken = null) {
+    protected function makePurchaseRequest($packageNameOrRequestOrArray, $productId = null, $purchaseToken = null)
+    {
 
         if ($packageNameOrRequestOrArray instanceof PurchaseStatusRequest) {
             return $packageNameOrRequestOrArray;
@@ -207,21 +205,17 @@ class BazaarApiFactory {
         $purchaseRequest = new PurchaseStatusRequest();
 
         if (is_array($packageNameOrRequestOrArray)) {
-
             $array = $packageNameOrRequestOrArray;
             $purchaseRequest->setPackage($array['package']);
             $purchaseRequest->setProductId($array['product_id']);
             $purchaseRequest->setPurchaseToken($array['purchase_token']);
-
         } else {
-
             $purchaseRequest->setPackage($packageNameOrRequestOrArray);
             $purchaseRequest->setProductId($productId);
             $purchaseRequest->setPurchaseToken($purchaseToken);
         }
 
         return $purchaseRequest;
-
     }
 
     /**
@@ -232,7 +226,8 @@ class BazaarApiFactory {
      * @param string|null $purchaseToken
      * @return SubscriptionStatusRequest
      */
-    protected function makeSubscriptionRequest($packageNameOrRequestOrArray, $subscriptionId = null, $purchaseToken = null) {
+    protected function makeSubscriptionRequest($packageNameOrRequestOrArray, $subscriptionId = null, $purchaseToken = null)
+    {
 
         if ($packageNameOrRequestOrArray instanceof SubscriptionStatusRequest) {
             return $packageNameOrRequestOrArray;
@@ -241,21 +236,17 @@ class BazaarApiFactory {
         $subscriptionRequest = new SubscriptionStatusRequest();
 
         if (is_array($packageNameOrRequestOrArray)) {
-
             $array = $packageNameOrRequestOrArray;
             $subscriptionRequest->setPackage($array['package']);
             $subscriptionRequest->setSubscriptionId($array['subscription_id']);
             $subscriptionRequest->setPurchaseToken($array['purchase_token']);
-
         } else {
-
             $subscriptionRequest->setPackage($packageNameOrRequestOrArray);
             $subscriptionRequest->setSubscriptionId($subscriptionId);
             $subscriptionRequest->setPurchaseToken($purchaseToken);
         }
 
         return $subscriptionRequest;
-
     }
 
     /**
@@ -266,7 +257,8 @@ class BazaarApiFactory {
      * @param string|null $purchaseToken
      * @return CancelSubscriptionRequest
      */
-    protected function makeCancelSubscriptionRequest($packageNameOrRequestOrArray, $subscriptionId = null, $purchaseToken = null) {
+    protected function makeCancelSubscriptionRequest($packageNameOrRequestOrArray, $subscriptionId = null, $purchaseToken = null)
+    {
 
         if ($packageNameOrRequestOrArray instanceof CancelSubscriptionRequest) {
             return $packageNameOrRequestOrArray;
@@ -275,21 +267,17 @@ class BazaarApiFactory {
         $cancelSubscriptionRequest = new CancelSubscriptionRequest();
 
         if (is_array($packageNameOrRequestOrArray)) {
-
             $array = $packageNameOrRequestOrArray;
             $cancelSubscriptionRequest->setPackage($array['package']);
             $cancelSubscriptionRequest->setSubscriptionId($array['subscription_id']);
             $cancelSubscriptionRequest->setPurchaseToken($array['purchase_token']);
-
         } else {
-
             $cancelSubscriptionRequest->setPackage($packageNameOrRequestOrArray);
             $cancelSubscriptionRequest->setSubscriptionId($subscriptionId);
             $cancelSubscriptionRequest->setPurchaseToken($purchaseToken);
         }
 
         return $cancelSubscriptionRequest;
-
     }
 
 
@@ -298,10 +286,10 @@ class BazaarApiFactory {
      *
      * @return ApiConfig
      */
-    public function getApiConfig() {
+    public function getApiConfig()
+    {
 
         if (!$this->apiConfig) {
-
             $apiConfig = new ApiConfig();
             $apiConfig->setAuthorizationGrantType($this->config->get('bazaar-api-laravel::api.authorization.grant_type'));
             $apiConfig->setAuthorizationPath($this->config->get('bazaar-api-laravel::api.authorization.path'));
@@ -324,10 +312,10 @@ class BazaarApiFactory {
      *
      * @return \Nikapps\BazaarApiPhp\Configs\AccountConfig
      */
-    public function getAccountConfig() {
+    public function getAccountConfig()
+    {
 
         if (!$this->accountConfig) {
-
             $accountConfig = new AccountConfig();
             $accountConfig->setClientId($this->config->get('bazaar-api-laravel::credentials.client_id'));
             $accountConfig->setClientSecret($this->config->get('bazaar-api-laravel::credentials.client_secret'));
@@ -343,9 +331,8 @@ class BazaarApiFactory {
     /**
      * @return \Nikapps\BazaarApiPhp\BazaarApi
      */
-    public function getBazaarApi() {
+    public function getBazaarApi()
+    {
         return $this->bazaarApi;
     }
-
-
 }
